@@ -1,0 +1,21 @@
+{
+    "Routes": [
+        {
+        "DownstreamPathTemplate": "/WeatherForecast/GetWeatherForecast",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+            {
+                "Host": "localhost",
+                "Port": 5223
+            }
+        ],
+        "UpstreamPathTemplate": "/gatewaytest",
+        "AuthenticationOptions": {
+            "AuthenticationProviderKey": "Bearer"
+          }
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "https://localhost:5000"
+    }
+}
