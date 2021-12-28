@@ -1,21 +1,15 @@
 {
-    "Routes": [
+    "ExchangeRoutes": {
+        "Routes":  
         {
-        "DownstreamPathTemplate": "/WeatherForecast/GetWeatherForecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-            {
-                "Host": "localhost",
-                "Port": 5223
+            "POST /exchange_test": {
+                "Exchange": "test_topic",
+                "RoutingKey": "read resources"
             }
-        ],
-        "UpstreamPathTemplate": "/gatewaytest",
-        "AuthenticationOptions": {
-            "AuthenticationProviderKey": "Bearer"
-          }
         }
-    ],
-    "GlobalConfiguration": {
-        "BaseUrl": "https://localhost:5000"
+        ,
+        "GlobalConfiguration": {
+            "BaseUrl": "https://localhost:5000"
+        }
     }
 }

@@ -1,6 +1,8 @@
 using Microsoft.Identity.Web;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using TeamLabs.Gateway.API.Infrastructure;
+using TeamLabs.Gateway.API.Models;
 
 namespace TeamLabs.Gateway.API
 {
@@ -16,9 +18,11 @@ namespace TeamLabs.Gateway.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<RoutesMiddleware>();
             services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
             services.AddHttpClient();
             services.AddOcelot(Configuration);
+            services.Configure<RoutesOptions>(Configuration.GetSection("ExchangeRoutes"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,7 +37,8 @@ namespace TeamLabs.Gateway.API
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseOcelot().Wait();
+            app.UseMiddleware<RoutesMiddleware>();
+            app.UseOcelot(GenerateOcelotConfiguration()).GetAwaiter().GetResult();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -41,5 +46,22 @@ namespace TeamLabs.Gateway.API
                 endpoints.MapControllers();
             });
         }
+
+        private static OcelotPipelineConfiguration GenerateOcelotConfiguration() 
+        => new OcelotPipelineConfiguration() 
+        {
+            AuthenticationMiddleware = async (context, next) => {
+                if(!context.DownstreamReRoute.IsAuthenticated) {
+                    await next.Invoke();
+                    return;
+                }
+
+                
+                var authResult = await context.HttpContext.AuthenticateAzureFunctionAsync(); //returns true if user is authenticated
+                if(authResult.Item1) {
+                    await next.Invoke();
+                }
+            }
+        };
     }
 }

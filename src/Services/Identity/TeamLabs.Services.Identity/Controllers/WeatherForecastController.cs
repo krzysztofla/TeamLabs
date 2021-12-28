@@ -24,7 +24,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope("Weather.Read");
+        HttpContext.VerifyUserHasAnyAcceptedScope("Read.All");
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
