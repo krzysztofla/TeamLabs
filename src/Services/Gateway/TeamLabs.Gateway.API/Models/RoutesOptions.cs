@@ -1,6 +1,6 @@
 namespace TeamLabs.Gateway.API.Models
 {
-    internal sealed class RoutesOptions
+    record class RoutesOptions
     {
         public IDictionary<string, RouteOptions> Routes {get; set;}
     }

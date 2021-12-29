@@ -13,11 +13,18 @@ namespace TeamLabs.Gateway.API.Infrastructure
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if(_routes is null || _routes.Any()){
+            if(_routes is null || !_routes.Any()){
                 await next(context);
                 return;
             }
+
             var key = $"{context.Request.Method} {context.Request.Path}";
+            if(!_routes.TryGetValue(key, out var route)) {
+                await next(context);
+                return;
+            }
+
+
         }
     }
 }

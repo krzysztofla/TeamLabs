@@ -1,7 +1,7 @@
 using System.Globalization;
 namespace TeamLabs.Gateway.API.Models
 {
-    internal sealed class RouteOptions
+    record RouteOptions
     {
         public string? Exchange {get; set; }
 

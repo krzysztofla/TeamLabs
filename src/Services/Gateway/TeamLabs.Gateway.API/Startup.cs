@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
@@ -20,6 +21,9 @@ namespace TeamLabs.Gateway.API
         {
             services.AddTransient<RoutesMiddleware>();
             services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
+            services.AddAzureClients(builder => {
+                builder.AddServiceBusClient(Configuration.GetConnectionString("AzureServiceBus"));
+            });
             services.AddHttpClient();
             services.AddOcelot(Configuration);
             services.Configure<RoutesOptions>(Configuration.GetSection("ExchangeRoutes"));
