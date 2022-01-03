@@ -1,0 +1,15 @@
+{
+    "ExchangeRoutes": {
+        "Routes":  
+        {
+            "POST /exchange_test": {
+                "Exchange": "test_topic",
+                "RoutingKey": "read resources"
+            }
+        }
+        ,
+        "GlobalConfiguration": {
+            "BaseUrl": "https://localhost:5000"
+        }
+    }
+}
